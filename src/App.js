@@ -1,18 +1,33 @@
 import React, { Component } from "react"
-import { Link } from "react-router-dom";
-import { Navbar, Nav, NavItem } from "react-bootstrap";
+import { Link } from "react-router-dom"
+import { Navbar, Nav, NavItem } from "react-bootstrap"
 
-import Routes from "./Routes";
-import RouteNavItem from "./components/RouteNavItem";
+import Routes from "./Routes"
+import RouteNavItem from "./components/RouteNavItem"
+import { authUser, signOutUser } from "./libs/awsLib"
 import "./App.css"
 
 class App extends Component {
 	constructor(props) {
-		super(props);
+		super(props)
 
 		this.state = {
-			isAuthenticated: false
-		};
+			isAuthenticated: false,
+			isAuthenticating: true
+		}
+	}
+
+	async componentDidMount() {
+		try {
+			if (await authUser()) {
+				this.userHasAuthenticated(true)
+			}
+		}
+		catch (e) {
+			alert(e);
+		}
+
+		this.setState({ isAuthenticating: false })
 	}
 
 	userHasAuthenticated = authenticated => {
@@ -20,6 +35,8 @@ class App extends Component {
 	}
 
 	handleLogout = event => {
+		signOutUser()
+
 		this.userHasAuthenticated(false)
 	}
 
@@ -30,6 +47,7 @@ class App extends Component {
 		};
 
 		return (
+			!this.state.isAuthenticating &&
 			<div className="App container">
 				<Navbar fluid collapseOnSelect>
 					<Navbar.Header>
