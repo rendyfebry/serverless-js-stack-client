@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import { Link } from "react-router-dom"
+import { withRouter, Link } from "react-router-dom"
 import { Navbar, Nav, NavItem } from "react-bootstrap"
 
 import Routes from "./Routes"
@@ -38,6 +38,7 @@ class App extends Component {
 		signOutUser()
 
 		this.userHasAuthenticated(false)
+		this.props.history.push("/login")
 	}
 
 	render() {
@@ -77,4 +78,4 @@ class App extends Component {
 	}
 }
 
-export default App
+export default withRouter(App)
